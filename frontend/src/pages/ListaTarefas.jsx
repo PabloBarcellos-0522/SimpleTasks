@@ -1,28 +1,43 @@
-// src/pages/ListaTareades.jsx
-import React, { useState, useEffect } from "react"
-import { getTarefas } from "../services/api"
+// src/pages/ListaTarefas.jsx
+import React, { useState, useEffect, useCallback } from "react"
+import { getTarefas, createTarefa } from "../services/api"
 import TarefaItem from "../components/TarefaItem"
+import TarefaForm from "../components/TarefaForm"
 
 function ListaTarefas() {
     const [tarefas, setTarefas] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [showForm, setShowForm] = useState(false)
+
+    const fetchTarefas = useCallback(async () => {
+        try {
+            setLoading(true)
+            const data = await getTarefas()
+            setTarefas(data)
+            setError(null)
+        } catch (err) {
+            setError("Falha ao carregar as tarefas. O backend está rodando?")
+            console.error(err)
+        } finally {
+            setLoading(false)
+        }
+    }, [])
 
     useEffect(() => {
-        async function fetchTarefas() {
-            try {
-                const data = await getTarefas()
-                setTarefas(data)
-            } catch (err) {
-                setError("Falha ao carregar as tarefas. O backend está rodando?")
-                console.error(err)
-            } finally {
-                setLoading(false)
-            }
-        }
-
         fetchTarefas()
-    }, [])
+    }, [fetchTarefas])
+
+    const handleCreateTarefa = async (tarefaData) => {
+        try {
+            await createTarefa(tarefaData)
+            setShowForm(false)
+            fetchTarefas()
+        } catch (err) {
+            console.error("Erro ao criar tarefa no componente ListaTarefas:", err)
+            throw err
+        }
+    }
 
     if (loading) {
         return <div>Carregando tarefas...</div>
@@ -43,14 +58,19 @@ function ListaTarefas() {
     return (
         <div>
             <h1>Lista de Tarefas</h1>
+            {showForm ? (
+                <TarefaForm onSubmit={handleCreateTarefa} onClose={() => setShowForm(false)} />
+            ) : (
+                <div>
+                    <button onClick={() => setShowForm(true)}>Incluir Nova Tarefa</button>
+                </div>
+            )}
+
             <ul>
                 {tarefas.map((tarefa) => (
                     <TarefaItem key={tarefa.id} tarefa={tarefa} />
                 ))}
             </ul>
-            <div>
-                <button>Incluir Nova Tarefa</button>
-            </div>
             <hr />
             <div>
                 <strong>Somatório dos Custos: {formatCurrency(totalCusto)}</strong>

@@ -14,3 +14,33 @@ export const getTarefas = async () => {
         throw error
     }
 }
+
+export const createTarefa = async (tarefaData) => {
+    try {
+        const response = await api.post("/tarefas", tarefaData)
+        return response.data
+    } catch (error) {
+        console.error("Erro ao criar tarefa:", error)
+        throw error
+    }
+}
+
+export const updateTarefa = async (id, tarefaData) => {
+    try {
+        const response = await api.put(`/tarefas/${id}`, tarefaData)
+        return response.data
+    } catch (error) {
+        console.error(`Erro ao atualizar tarefa ${id}:`, error)
+        throw error
+    }
+}
+
+export const deleteTarefa = async (id) => {
+    try {
+        const response = await api.delete(`/tarefas/${id}`)
+        return response.data
+    } catch (error) {
+        console.error(`Erro ao excluir tarefa ${id}:`, error)
+        throw error
+    }
+}
