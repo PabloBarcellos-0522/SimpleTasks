@@ -11,9 +11,7 @@ app.use(express.json())
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    // ssl: {
-    //   rejectUnauthorized: false // Consider setting this to true in production and configuring CA certificates
-    // }
+    ssl: true,
 })
 
 app.get("/", (req, res) => {
