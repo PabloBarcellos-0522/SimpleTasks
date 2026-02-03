@@ -2,10 +2,9 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "http://localhost:3001", // A URL do seu backend
+    baseURL: "http://localhost:3001",
 })
 
-// Função para buscar todas as tarefas
 export const getTarefas = async () => {
     try {
         const response = await api.get("/tarefas")
@@ -15,5 +14,3 @@ export const getTarefas = async () => {
         throw error
     }
 }
-
-// Adicione aqui as outras funções da API (create, update, delete, etc.)
