@@ -1,6 +1,15 @@
 // src/pages/ListaTarefas.jsx
 import React, { useState, useEffect, useCallback } from "react"
 import {
+    DndContext,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core"
+import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable"
+import {
     getTarefas,
     createTarefa,
     updateTarefa,
@@ -18,6 +27,8 @@ function ListaTarefas() {
     const [showForm, setShowForm] = useState(false)
     const [editingTask, setEditingTask] = useState(null)
     const [deletingTaskId, setDeletingTaskId] = useState(null)
+
+    const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor))
 
     const fetchTarefas = useCallback(async () => {
         try {
@@ -84,6 +95,36 @@ function ListaTarefas() {
         setShowForm(true)
     }
 
+    const handleDragEnd = async (event) => {
+        const { active, over } = event
+
+        if (active.id !== over.id) {
+            setTarefas((items) => {
+                const oldIndex = items.findIndex((item) => item.id === active.id)
+                const newIndex = items.findIndex((item) => item.id === over.id)
+
+                const newOrderedTarefas = arrayMove(items, oldIndex, newIndex).map(
+                    (tarefa, index) => ({ ...tarefa, ordem: index + 1 }),
+                )
+
+                const orderedData = newOrderedTarefas.map((t) => ({
+                    id: t.id,
+                    ordem: t.ordem,
+                }))
+
+                try {
+                    reorderTarefas(orderedData)
+                } catch (err) {
+                    console.error("Erro ao reordenar tarefas no frontend:", err)
+                    setError("Falha ao reordenar tarefas.")
+                    fetchTarefas()
+                }
+
+                return newOrderedTarefas
+            })
+        }
+    }
+
     const handleMove = async (id, direction) => {
         const newTarefas = [...tarefas]
         const index = newTarefas.findIndex((t) => t.id === id)
@@ -147,32 +188,43 @@ function ListaTarefas() {
                 />
             )}
 
-            <ul>
-                {tarefas.map((tarefa, index) => (
-                    <TarefaItem
-                        key={tarefa.id}
-                        tarefa={tarefa}
-                        onEdit={handleEdit}
-                        onDelete={handleDeleteRequest}
-                        onMoveUp={handleMoveUp}
-                        onMoveDown={handleMoveDown}
-                        isFirst={index === 0}
-                        isLast={index === tarefas.length - 1}
-                    />
-                ))}
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+            >
+                <SortableContext
+                    items={tarefas.map((t) => t.id)}
+                    strategy={verticalListSortingStrategy}
+                >
+                    <ul>
+                        {tarefas.map((tarefa, index) => (
+                            <TarefaItem
+                                key={tarefa.id}
+                                tarefa={tarefa}
+                                onEdit={handleEdit}
+                                onDelete={handleDeleteRequest}
+                                onMoveUp={handleMoveUp}
+                                onMoveDown={handleMoveDown}
+                                isFirst={index === 0}
+                                isLast={index === tarefas.length - 1}
+                            />
+                        ))}
+                    </ul>
+                </SortableContext>
+            </DndContext>
 
-                <div>
-                    <button
-                        className="insert-btn"
-                        onClick={() => {
-                            setShowForm(true)
-                            setEditingTask(null)
-                        }}
-                    >
-                        Incluir Nova Tarefa
-                    </button>
-                </div>
-            </ul>
+            <div>
+                <button
+                    className="insert-btn"
+                    onClick={() => {
+                        setShowForm(true)
+                        setEditingTask(null)
+                    }}
+                >
+                    Incluir Nova Tarefa
+                </button>
+            </div>
 
             <hr />
             <div>

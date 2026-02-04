@@ -50,3 +50,34 @@
     margin-right: 0;
     margin-left: 0;
 }
+
+.dragging {
+    opacity: 0.5;
+    background-color: #555;
+}
+
+.drag-handle {
+    cursor: grab;
+    padding: 0 10px;
+    margin-right: 10px;
+    font-size: 1.5em;
+}
+
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.move-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.move-buttons button {
+    font-size: 0.8em;
+    height: auto;
+    line-height: 1;
+    margin: 0;
+}
