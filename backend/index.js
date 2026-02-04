@@ -124,7 +124,7 @@ app.delete("/tarefas/:id", async (req, res) => {
 })
 
 // PUT /tarefas/reordenar: Atualiza a ordem de múltiplas tarefas
-app.put("/tarefas/reordenar", async (req, res) => {
+app.patch("/tarefas/reordenar", async (req, res) => {
     const { tarefas } = req.body // Espera um array [{id, ordem}]
 
     if (!Array.isArray(tarefas) || tarefas.length === 0) {
@@ -136,6 +136,7 @@ app.put("/tarefas/reordenar", async (req, res) => {
     const client = await pool.connect()
     try {
         await client.query("BEGIN")
+        await client.query("SET CONSTRAINTS ALL DEFERRED")
 
         for (const tarefa of tarefas) {
             if (tarefa.id === undefined || tarefa.ordem === undefined) {
