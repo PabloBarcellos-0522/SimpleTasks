@@ -17,17 +17,8 @@ const formatDate = (dateString) => {
 function TarefaItem({ tarefa, onEdit, onDelete, onMoveUp, onMoveDown, isFirst, isLast }) {
     const { id, nome, custo, data_limite } = tarefa
 
-    const itemStyle = {
-        backgroundColor: custo >= 1000 ? "yellow" : "transparent",
-        padding: "10px",
-        borderBottom: "1px solid #ccc",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-    }
-
     return (
-        <li style={itemStyle}>
+        <li className={custo >= 1000 ? "task-item item-gold" : "task-item"}>
             <span>{nome}</span>
             <span>{formatCurrency(custo)}</span>
             <span>{formatDate(data_limite)}</span>

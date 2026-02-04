@@ -52,13 +52,13 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
         >
             <h2>{initialData?.id ? "Editar Tarefa" : "Incluir Nova Tarefa"}</h2>
             {error && <p style={{ color: "red" }}>{error}</p>}
-            <div>
+            <p>
                 <label>
                     Nome:
                     <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
                 </label>
-            </div>
-            <div>
+            </p>
+            <p>
                 <label>
                     Custo:
                     <input
@@ -68,8 +68,8 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
                         onChange={(e) => setCusto(e.target.value)}
                     />
                 </label>
-            </div>
-            <div>
+            </p>
+            <p>
                 <label>
                     Data Limite:
                     <input
@@ -78,7 +78,7 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
                         onChange={(e) => setDataLimite(e.target.value)}
                     />
                 </label>
-            </div>
+            </p>
             <button type="submit">Salvar</button>
             <button type="button" onClick={onClose}>
                 Cancelar
