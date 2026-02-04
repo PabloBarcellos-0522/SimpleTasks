@@ -46,44 +46,47 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
     }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            style={{ border: "1px solid #ccc", padding: "15px", marginBottom: "20px" }}
-        >
-            <h2>{initialData?.id ? "Editar Tarefa" : "Incluir Nova Tarefa"}</h2>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            <p>
-                <label>
-                    Nome:
-                    <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
-                </label>
-            </p>
-            <p>
-                <label>
-                    Custo:
-                    <input
-                        type="number"
-                        step="0.01"
-                        value={custo}
-                        onChange={(e) => setCusto(e.target.value)}
-                    />
-                </label>
-            </p>
-            <p>
-                <label>
-                    Data Limite:
-                    <input
-                        type="date"
-                        value={data_limite}
-                        onChange={(e) => setDataLimite(e.target.value)}
-                    />
-                </label>
-            </p>
-            <button type="submit">Salvar</button>
-            <button type="button" onClick={onClose}>
-                Cancelar
-            </button>
-        </form>
+        <div className="modal">
+            <form
+                onSubmit={handleSubmit}
+                style={{ border: "1px solid #ccc", padding: "15px", marginBottom: "20px" }}
+                className="content-modal"
+            >
+                <h2>{initialData?.id ? "Editar Tarefa" : "Incluir Nova Tarefa"}</h2>
+                {error && <p style={{ color: "red" }}>{error}</p>}
+                <p>
+                    <label>
+                        Nome:
+                        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Custo:
+                        <input
+                            type="number"
+                            step="0.01"
+                            value={custo}
+                            onChange={(e) => setCusto(e.target.value)}
+                        />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Data Limite:
+                        <input
+                            type="date"
+                            value={data_limite}
+                            onChange={(e) => setDataLimite(e.target.value)}
+                        />
+                    </label>
+                </p>
+                <button type="submit">Salvar</button>
+                <button type="button" onClick={onClose}>
+                    Cancelar
+                </button>
+            </form>
+        </div>
     )
 }
 

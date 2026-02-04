@@ -104,9 +104,9 @@ function ListaTarefas() {
         const orderedData = newTarefas.map((t) => ({ id: t.id, ordem: t.ordem }))
 
         try {
-            await reorderTarefas(orderedData)
-
-            fetchTarefas()
+            if (200 >= (await reorderTarefas(orderedData)).status >= 300) {
+                fetchTarefas()
+            }
         } catch (err) {
             console.error("Erro ao reordenar tarefas:", err)
             setError("Falha ao reordenar tarefas.")
@@ -147,19 +147,6 @@ function ListaTarefas() {
                 />
             )}
 
-            {!showForm && (
-                <div>
-                    <button
-                        onClick={() => {
-                            setShowForm(true)
-                            setEditingTask(null)
-                        }}
-                    >
-                        Incluir Nova Tarefa
-                    </button>
-                </div>
-            )}
-
             <ul>
                 {tarefas.map((tarefa, index) => (
                     <TarefaItem
@@ -173,7 +160,20 @@ function ListaTarefas() {
                         isLast={index === tarefas.length - 1}
                     />
                 ))}
+
+                <div>
+                    <button
+                        className="insert-btn"
+                        onClick={() => {
+                            setShowForm(true)
+                            setEditingTask(null)
+                        }}
+                    >
+                        Incluir Nova Tarefa
+                    </button>
+                </div>
             </ul>
+
             <hr />
             <div>
                 <strong>Somatório dos Custos: {formatCurrency(totalCusto)}</strong>
