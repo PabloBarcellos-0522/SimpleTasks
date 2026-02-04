@@ -6,7 +6,11 @@ const { Pool } = require("pg")
 const app = express()
 const port = process.env.PORT || 3001
 
-app.use(cors())
+app.use(
+    cors({
+        origin: ["http://localhost:5173", "https://simple-tasks-mauve.vercel.app"],
+    }),
+)
 app.use(express.json())
 
 const pool = new Pool({
