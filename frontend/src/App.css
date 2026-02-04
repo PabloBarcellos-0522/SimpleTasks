@@ -13,13 +13,13 @@
     align-items: center;
     font-weight: bold;
     background: #2d2d2d;
-    border-radius: 10px;
+    border-radius: 1rem;
 }
 
 .item-gold {
     background-color: yellow;
     color: black;
-    border-radius: 0.5rem;
+    border-bottom: solid 3px white;
 }
 
 .modal {
@@ -52,8 +52,9 @@
 }
 
 .dragging {
-    opacity: 0.5;
-    background-color: #555;
+    opacity: 0.8;
+    z-index: 100;
+    position: relative;
 }
 
 .drag-handle {
@@ -80,4 +81,34 @@
     height: auto;
     line-height: 1;
     margin: 0;
+}
+
+@media (max-width: 690px) {
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-item > span {
+        margin-bottom: 5px;
+    }
+
+    .drag-handle {
+        align-self: flex-start;
+        margin-bottom: 5px;
+    }
+
+    .task-actions {
+        flex-direction: column;
+        gap: 5px;
+        width: 100%; /* Make buttons take full width */
+    }
+
+    .task-actions button {
+        width: 100%;
+    }
+
+    .move-buttons {
+        display: none; /* Hide move buttons on small screens */
+    }
 }

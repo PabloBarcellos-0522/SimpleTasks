@@ -25,8 +25,6 @@ function TarefaItem({ tarefa, onEdit, onDelete, onMoveUp, onMoveDown, isFirst, i
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        zIndex: isDragging ? 10 : "auto",
-        opacity: isDragging ? 0.7 : 1,
         userSelect: "none",
     }
 
@@ -43,8 +41,10 @@ function TarefaItem({ tarefa, onEdit, onDelete, onMoveUp, onMoveDown, isFirst, i
                 ☰
             </div>
             <span>{nome}</span>
-            <span>{formatCurrency(custo)}</span>
-            <span>{formatDate(data_limite)}</span>
+            <div>
+                <span>{formatCurrency(custo)}</span>
+                <span>{formatDate(data_limite)}</span>
+            </div>
             <div className="task-actions">
                 <button onClick={() => onEdit(tarefa)}>Editar</button>
                 <button onClick={() => onDelete(id)}>Excluir</button>
