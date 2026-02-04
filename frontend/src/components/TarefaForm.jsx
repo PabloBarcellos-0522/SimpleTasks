@@ -1,18 +1,18 @@
 // src/components/TarefaForm.jsx
 import React, { useState, useEffect } from "react"
 
-function TarefaForm({ onSubmit, onClose, initialData = {} }) {
-    const [nome, setNome] = useState(initialData.nome || "")
-    const [custo, setCusto] = useState(initialData.custo || "")
+function TarefaForm({ onSubmit, onClose, initialData }) {
+    const [nome, setNome] = useState(initialData?.nome || "")
+    const [custo, setCusto] = useState(initialData?.custo || "")
     const [data_limite, setDataLimite] = useState(
-        initialData.data_limite ? initialData.data_limite.split("T")[0] : "",
+        initialData?.data_limite ? initialData.data_limite.split("T")[0] : "",
     )
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        setNome(initialData.nome || "")
-        setCusto(initialData.custo || "")
-        setDataLimite(initialData.data_limite ? initialData.data_limite.split("T")[0] : "")
+        setNome(initialData?.nome || "")
+        setCusto(initialData?.custo || "")
+        setDataLimite(initialData?.data_limite ? initialData.data_limite.split("T")[0] : "")
         setError(null)
     }, [initialData])
 
@@ -35,7 +35,7 @@ function TarefaForm({ onSubmit, onClose, initialData = {} }) {
                 custo: parseFloat(custo),
                 data_limite,
             }
-            if (initialData.id) {
+            if (initialData?.id) {
                 await onSubmit(initialData.id, dataToSubmit)
             } else {
                 await onSubmit(dataToSubmit)
@@ -50,7 +50,7 @@ function TarefaForm({ onSubmit, onClose, initialData = {} }) {
             onSubmit={handleSubmit}
             style={{ border: "1px solid #ccc", padding: "15px", marginBottom: "20px" }}
         >
-            <h2>{initialData.id ? "Editar Tarefa" : "Incluir Nova Tarefa"}</h2>
+            <h2>{initialData?.id ? "Editar Tarefa" : "Incluir Nova Tarefa"}</h2>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <div>
                 <label>
