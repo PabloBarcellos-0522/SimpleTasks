@@ -14,8 +14,8 @@ const formatDate = (dateString) => {
     return new Intl.DateTimeFormat("pt-BR").format(adjustedDate)
 }
 
-function TarefaItem({ tarefa }) {
-    const { nome, custo, data_limite } = tarefa
+function TarefaItem({ tarefa, onEdit, onDelete, onMoveUp, onMoveDown, isFirst, isLast }) {
+    const { id, nome, custo, data_limite } = tarefa
 
     const itemStyle = {
         backgroundColor: custo >= 1000 ? "yellow" : "transparent",
@@ -32,9 +32,14 @@ function TarefaItem({ tarefa }) {
             <span>{formatCurrency(custo)}</span>
             <span>{formatDate(data_limite)}</span>
             <div>
-                <button>Editar</button>
-                <button>Excluir</button>
-                {/* Botões de reordenação serão adicionados aqui */}
+                <button onClick={() => onEdit(tarefa)}>Editar</button>
+                <button onClick={() => onDelete(id)}>Excluir</button>
+                <button onClick={() => onMoveUp(id)} disabled={isFirst}>
+                    ↑
+                </button>
+                <button onClick={() => onMoveDown(id)} disabled={isLast}>
+                    ↓
+                </button>
             </div>
         </li>
     )

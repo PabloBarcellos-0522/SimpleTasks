@@ -44,3 +44,13 @@ export const deleteTarefa = async (id) => {
         throw error
     }
 }
+
+export const reorderTarefas = async (orderedTasks) => {
+    try {
+        const response = await api.put("/tarefas/reordenar", { tarefas: orderedTasks })
+        return response.data
+    } catch (error) {
+        console.error("Erro ao reordenar tarefas:", error)
+        throw error
+    }
+}

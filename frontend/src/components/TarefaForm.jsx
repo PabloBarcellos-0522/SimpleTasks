@@ -1,18 +1,26 @@
 // src/components/TarefaForm.jsx
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
-function TarefaForm({ onSubmit, onClose }) {
-    const [nome, setNome] = useState("")
-    const [custo, setCusto] = useState("")
-    const [data_limite, setDataLimite] = useState("")
+function TarefaForm({ onSubmit, onClose, initialData = {} }) {
+    const [nome, setNome] = useState(initialData.nome || "")
+    const [custo, setCusto] = useState(initialData.custo || "")
+    const [data_limite, setDataLimite] = useState(
+        initialData.data_limite ? initialData.data_limite.split("T")[0] : "",
+    )
     const [error, setError] = useState(null)
+
+    useEffect(() => {
+        setNome(initialData.nome || "")
+        setCusto(initialData.custo || "")
+        setDataLimite(initialData.data_limite ? initialData.data_limite.split("T")[0] : "")
+        setError(null)
+    }, [initialData])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError(null)
 
-        // Validação básica no frontend
-        if (!nome || !custo || !data_limite) {
+        if (!nome || custo === undefined || !data_limite) {
             setError("Todos os campos são obrigatórios.")
             return
         }
@@ -22,11 +30,16 @@ function TarefaForm({ onSubmit, onClose }) {
         }
 
         try {
-            await onSubmit({ nome, custo: parseFloat(custo), data_limite })
-            // Limpar o formulário após o sucesso
-            setNome("")
-            setCusto("")
-            setDataLimite("")
+            const dataToSubmit = {
+                nome,
+                custo: parseFloat(custo),
+                data_limite,
+            }
+            if (initialData.id) {
+                await onSubmit(initialData.id, dataToSubmit)
+            } else {
+                await onSubmit(dataToSubmit)
+            }
         } catch (err) {
             setError(err.response?.data?.error || "Erro ao salvar tarefa.")
         }
@@ -37,7 +50,7 @@ function TarefaForm({ onSubmit, onClose }) {
             onSubmit={handleSubmit}
             style={{ border: "1px solid #ccc", padding: "15px", marginBottom: "20px" }}
         >
-            <h2>{nome ? "Editar Tarefa" : "Incluir Nova Tarefa"}</h2>
+            <h2>{initialData.id ? "Editar Tarefa" : "Incluir Nova Tarefa"}</h2>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <div>
                 <label>
