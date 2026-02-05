@@ -50,9 +50,9 @@ function ListaTarefas() {
 
     const handleCreateTarefa = async (tarefaData) => {
         try {
-            await createTarefa(tarefaData)
+            const novaTarefa = await createTarefa(tarefaData)
+            setTarefas((prev) => [...prev, novaTarefa])
             setShowForm(false)
-            fetchTarefas()
         } catch (err) {
             console.error("Erro ao criar tarefa no componente ListaTarefas:", err)
             throw err
@@ -61,10 +61,13 @@ function ListaTarefas() {
 
     const handleUpdateTarefa = async (id, tarefaData) => {
         try {
-            await updateTarefa(id, tarefaData)
+            const taskFromBD = await updateTarefa(id, tarefaData)
             setEditingTask(null)
             setShowForm(false)
-            fetchTarefas()
+            setTarefas((prev) => {
+                const novaLista = prev.map((t) => (t.id === id ? taskFromBD : t))
+                return [...novaLista].sort((a, b) => a.ordem - b.ordem)
+            })
         } catch (err) {
             console.error("Erro ao atualizar tarefa no componente ListaTarefas:", err)
             throw err

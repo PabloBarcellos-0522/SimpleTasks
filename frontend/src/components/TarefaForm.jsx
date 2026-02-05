@@ -1,5 +1,6 @@
 // src/components/TarefaForm.jsx
 import React, { useState, useEffect } from "react"
+import LoadingSpinner from "./LoadingSpinner"
 
 function TarefaForm({ onSubmit, onClose, initialData }) {
     const [nome, setNome] = useState(initialData?.nome || "")
@@ -8,6 +9,7 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
         initialData?.data_limite ? initialData.data_limite.split("T")[0] : "",
     )
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         setNome(initialData?.nome || "")
@@ -20,7 +22,7 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
         e.preventDefault()
         setError(null)
 
-        if (!nome || custo === undefined || !data_limite) {
+        if (!nome || !custo || custo === undefined || !data_limite) {
             setError("Todos os campos são obrigatórios.")
             return
         }
@@ -29,6 +31,7 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
             return
         }
 
+        setLoading(true)
         try {
             const dataToSubmit = {
                 nome,
@@ -42,6 +45,8 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
             }
         } catch (err) {
             setError(err.response?.data?.error || "Erro ao salvar tarefa.")
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -81,8 +86,10 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
                         />
                     </label>
                 </p>
-                <button type="submit">Salvar</button>
-                <button type="button" onClick={onClose}>
+                <button type="submit" disabled={loading}>
+                    {loading ? <LoadingSpinner /> : "Salvar"}
+                </button>
+                <button type="button" onClick={onClose} disabled={loading}>
                     Cancelar
                 </button>
             </form>

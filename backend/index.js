@@ -142,18 +142,23 @@ app.patch("/tarefas/reordenar", async (req, res) => {
         await client.query("BEGIN")
         await client.query("SET CONSTRAINTS ALL DEFERRED")
 
+        const tasksUpdated = []
         for (const tarefa of tarefas) {
             if (tarefa.id === undefined || tarefa.ordem === undefined) {
                 throw new Error('Cada tarefa no array deve ter "id" e "ordem".')
             }
-            await client.query("UPDATE tarefas SET ordem = $1 WHERE id = $2", [
-                tarefa.ordem,
-                tarefa.id,
-            ])
+            const result = await client.query(
+                "UPDATE tarefas SET ordem = $1 WHERE id = $2 RETURNING *",
+                [tarefa.ordem, tarefa.id],
+            )
+
+            if (result.rows.length > 0) {
+                tasksUpdated.push(result.rows[0])
+            }
         }
 
         await client.query("COMMIT")
-        res.status(200).json({ message: "Ordem das tarefas atualizada com sucesso." })
+        res.status(200).json(tasksUpdated)
     } catch (err) {
         await client.query("ROLLBACK")
         console.error("Erro ao reordenar tarefas:", err)
