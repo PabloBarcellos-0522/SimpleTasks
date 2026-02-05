@@ -25,7 +25,7 @@ function TarefaItem({ tarefa, onEdit, onDelete, onMoveUp, onMoveDown, isFirst, i
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        userSelect: "none",
+        touchAction: "none",
     }
 
     return (
