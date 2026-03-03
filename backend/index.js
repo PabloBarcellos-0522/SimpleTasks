@@ -49,6 +49,11 @@ function isInputInvalid(req, res) {
         res.status(400).json({ error: "Data-limite inválida." })
         return true
     }
+    const parteInteira = custo.split(/[.,]/)[0].replace(/\D/g, "")
+    if (parteInteira.length > 15) {
+        res.status(400).json({ error: "custo inválido." })
+        return true
+    }
     return false
 }
 
