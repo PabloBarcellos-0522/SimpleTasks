@@ -40,11 +40,10 @@ function TarefaItem({ tarefa, onEdit, onDelete, onMoveUp, onMoveDown, isFirst, i
             <div className="drag-handle" {...listeners}>
                 ☰
             </div>
-            <span>{nome}</span>
-            <div>
-                <span>{formatCurrency(custo)}</span>
-                <span>{formatDate(data_limite)}</span>
-            </div>
+            <span className="task-id">{id}</span>
+            <span className="task-name">{nome}</span>
+            <span className="task-cost">{formatCurrency(custo)}</span>
+            <span className="task-date">{formatDate(data_limite)}</span>
             <div className="task-actions">
                 <button onClick={() => onEdit(tarefa)}>Editar</button>
                 <button onClick={() => onDelete(id)}>Excluir</button>

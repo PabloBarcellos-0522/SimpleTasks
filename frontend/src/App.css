@@ -15,6 +15,33 @@
     background: #2d2d2d;
     border-radius: 1rem;
     color: white;
+    display: grid;
+    grid-template-columns:
+        20px /* drag */
+        60px /* id */
+        1fr /* nome */
+        220px /* custo */
+        100px /* data */
+        240px; /* ações */
+    gap: 5px;
+}
+
+.task-id {
+    text-align: center;
+    font-weight: 600;
+}
+
+.task-name {
+    justify-self: start;
+}
+
+.task-cost {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.task-date {
+    text-align: center;
 }
 
 .item-gold {
@@ -84,10 +111,13 @@
     margin: 0;
 }
 
-@media (max-width: 690px) {
+@media (max-width: 875px) {
     .task-item {
         flex-direction: column;
         align-items: flex-start;
+        display: flex;
+        gap: 0;
+        line-height: normal;
     }
 
     .task-item > span {
@@ -127,6 +157,10 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
