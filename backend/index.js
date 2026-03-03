@@ -95,7 +95,7 @@ app.put("/tarefas/:id", async (req, res) => {
 
         const result = await pool.query(
             "UPDATE tarefas SET nome = $1, custo = $2, data_limite = $3 WHERE id = $4 RETURNING *",
-            [nome, parseFloat(custo), data_limite, id],
+            [nome, custo, data_limite, id],
         )
 
         if (result.rows.length === 0) {

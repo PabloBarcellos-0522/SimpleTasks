@@ -170,6 +170,24 @@ function ListaTarefas() {
     }
 
     const totalCusto = tarefas.reduce((sum, tarefa) => sum + parseFloat(tarefa.custo), 0)
+    const totalCustoBig = tarefas.reduce((sum, tarefa) => {
+        const valorLimpo = tarefa.custo.toString().replace(/\D/g, "")
+        const valorParaSomar = valorLimpo === "" ? "0" : valorLimpo
+        return sum + BigInt(valorParaSomar)
+    }, 0n)
+
+    const formatBigValue = (valorBig) => {
+        let str = valorBig.toString()
+        str = str.padStart(3, "0")
+
+        const parteInteira = str.slice(0, -2)
+        const parteDecimal = str.slice(-2)
+
+        const parteInteiraFormatada = BigInt(parteInteira).toLocaleString("pt-BR")
+
+        return `${parteInteiraFormatada},${parteDecimal}`
+    }
+
     const formatCurrency = (value) => {
         return new Intl.NumberFormat("pt-BR", {
             style: "currency",
@@ -231,7 +249,7 @@ function ListaTarefas() {
 
             <hr />
             <div>
-                <strong>Somatório dos Custos: {formatCurrency(totalCusto)}</strong>
+                <strong>Somatório dos Custos: {formatBigValue(totalCustoBig)}</strong>
             </div>
 
             {deletingTaskId && (

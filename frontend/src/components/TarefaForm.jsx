@@ -31,11 +31,17 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
             return
         }
 
+        const parteInteira = custo.split(/[.,]/)[0].replace(/\D/g, "")
+        if (parteInteira.length > 49) {
+            setError("Custo deve ter no máximo 49 dígitos inteiros.")
+            return
+        }
+
         setLoading(true)
         try {
             const dataToSubmit = {
                 nome,
-                custo: parseFloat(custo),
+                custo,
                 data_limite,
             }
             if (initialData?.id) {
