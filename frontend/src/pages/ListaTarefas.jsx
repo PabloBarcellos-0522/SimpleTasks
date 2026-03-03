@@ -169,7 +169,6 @@ function ListaTarefas() {
         return <div>Erro: {error}</div>
     }
 
-    const totalCusto = tarefas.reduce((sum, tarefa) => sum + parseFloat(tarefa.custo), 0)
     const totalCustoBig = tarefas.reduce((sum, tarefa) => {
         const valorLimpo = tarefa.custo.toString().replace(/\D/g, "")
         const valorParaSomar = valorLimpo === "" ? "0" : valorLimpo
@@ -186,13 +185,6 @@ function ListaTarefas() {
         const parteInteiraFormatada = BigInt(parteInteira).toLocaleString("pt-BR")
 
         return `${parteInteiraFormatada},${parteDecimal}`
-    }
-
-    const formatCurrency = (value) => {
-        return new Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-        }).format(value)
     }
 
     return (

@@ -32,8 +32,9 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
         }
 
         const parteInteira = custo.split(/[.,]/)[0].replace(/\D/g, "")
-        if (parteInteira.length > 49) {
-            setError("Custo deve ter no máximo 49 dígitos inteiros.")
+        if (parteInteira.length > 19) {
+            console.log(parteInteira.length)
+            setError("Custo deve ter no máximo 19 dígitos inteiros.")
             return
         }
 
