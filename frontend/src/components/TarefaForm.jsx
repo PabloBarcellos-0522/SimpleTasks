@@ -1,5 +1,5 @@
 // src/components/TarefaForm.jsx
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import LoadingSpinner from "./LoadingSpinner"
 
 function TarefaForm({ onSubmit, onClose, initialData }) {
@@ -18,6 +18,11 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
         setError(null)
     }, [initialData])
 
+    const inputRef = useRef(null)
+    useEffect(() => {
+        inputRef.current?.focus()
+    }, [])
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError(null)
@@ -33,7 +38,6 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
 
         const parteInteira = custo.split(/[.,]/)[0].replace(/\D/g, "")
         if (parteInteira.length > 19) {
-            console.log(parteInteira.length)
             setError("Custo deve ter no máximo 19 dígitos inteiros.")
             return
         }
@@ -69,7 +73,12 @@ function TarefaForm({ onSubmit, onClose, initialData }) {
                 <p>
                     <label>
                         Nome:
-                        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            value={nome}
+                            onChange={(e) => setNome(e.target.value)}
+                        />
                     </label>
                 </p>
                 <p>
